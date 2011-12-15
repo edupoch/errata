@@ -1,4 +1,4 @@
-//TODO Unobstructive JavaScript
+// TODO Unobstructive JavaScript
 
 var com;
 

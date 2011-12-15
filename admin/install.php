@@ -4,9 +4,11 @@ require_once ('../model/model.php');
 
 connect();
 
+$conf = new ConfigurationManager();
+
 //TODO Elegir un tamaño de html más grande
 
-$sql = "CREATE TABLE IF NOT EXISTS `" .DATABASE_PREFIX."errata` (
+$sql = "CREATE TABLE IF NOT EXISTS `" .$conf->__get("databasePrefix")."errata` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
   `errata` varchar(50) CHARACTER SET utf8 NOT NULL,
