@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<host>estudiocaravana.com</host>
+	<database>ec_test</database>
+	<user>test</user>
+	<password>t3st12</password>
+	<databasePrefix>ec_</databasePrefix>	
+	<lang>es_ES</lang>
+</configuration>
