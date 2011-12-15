@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+		<title>Errata HTML Elements</title>
+		<link rel="stylesheet" type="text/css" href="elements.css" />
+		<link rel="stylesheet" type="text/css" href="elementsDebug.css" />
+	</head>
+	<body>
+		<div id='errataBox'>
+			<a href='javascript:showErrataForm()'><?php echo "Hola"?></a>
+			<div id="errataForm">
+				Errata: "<span id="errata"></span>" <br>
+				Corrección: <input type="text" name="errataCorrection" value="" id="errataCorrection"/><br>
+				<a href="javascript:showErrataDetails()">+ Más detalles</a><br>
+				<div id="errataDetails">
+					Descripción: <br> <textarea name="errataDescription"></textarea><br>
+					Correo: <input type="text" name="errataEmail" value="" id="errataEmail"/><br>
+				</div>
+				<a href="javascript: sendErrata()">Enviar errata</a>
+			</div>
+		</div>
+	</body>
+</html>

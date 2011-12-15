@@ -1,0 +1,46 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Errata\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-12-11 21:06+0100\n"
+"PO-Revision-Date: 2011-12-11 21:09+0100\n"
+"Last-Translator: \n"
+"Language-Team: estudiocaravana.com <estudiocaravana@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__\n"
+"X-Poedit-Basepath: /Users/edupoch/Documents/workspace/RemoteSystemsTempFiles/web/errata2/plugin\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: elements.php:20
+msgid "Errata report"
+msgstr "Informar de errata"
+
+#: elements.php:22
+msgid "Errata:"
+msgstr "Errata:"
+
+#: elements.php:24
+msgid "Correction:"
+msgstr "Corrección:"
+
+#: elements.php:28
+msgid "+ More details"
+msgstr "+ Más detalles"
+
+#: elements.php:31
+msgid "Description:"
+msgstr "Descripción:"
+
+#: elements.php:34
+msgid "Email:"
+msgstr "Correo:"
+
+#: elements.php:38
+msgid "Send errata report"
+msgstr "Enviar errata"
+

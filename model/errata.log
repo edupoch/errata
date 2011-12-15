@@ -1,0 +1,2 @@
+1112110152: newErrata - SQL = INSERT INTO ec_errata SET `errata` = `scelerisque`, `correction` = `a`, `url` = `http://estudiocaravana.com/errata2/`, `path` = `//HTML/BODY/DIV[1]/DIV`, `html` = `a`
+1112110153: newErrata - SQL = INSERT INTO ec_errata SET `errata` = `laoreet`, `correction` = `a`, `url` = `http://estudiocaravana.com/errata2/`, `path` = `//HTML/BODY/DIV[1]/DIV`, `html` = `a`;
