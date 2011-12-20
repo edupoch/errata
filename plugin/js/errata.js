@@ -15,16 +15,25 @@ if (!com.estudiocaravana) com.estudiocaravana = {};
 com.estudiocaravana.Errata = {};
 
 (function( ){
+
+	var _rootDirPath;
 	
 	function init(){
-		$("head").append('<link rel="stylesheet" type="text/css" href="plugin/elements.css" />');	
+
+		//We get the plugin root directory path from the <script> tag included in the html document
+		_rootDirPath = $("#com-estudiocaravana-errata-script").attr("src");
+		_rootDirPath = _rootDirPath.split("/");
+		_rootDirPath = _rootDirPath.slice(0,_rootDirPath.length - 3);
+		_rootDirPath = _rootDirPath.join("/");
+		_rootDirPath = "/" + _rootDirPath;
+
+		$("head").append('<link rel="stylesheet" type="text/css" href="'+_rootDirPath+'plugin/elements.css" />');	
 		$("html").append("<div id='com-estudiocaravana-errata-errataBoxWrapper' style='position:absolute; display:none'></div>");
 		var textNodes = _getTextNodes(document);
 		textNodes = $(textNodes);
-		textNodes.parent().mouseup(_getSelectedText);
-		
-		//TODO Cargar los elementos indep. de la carpeta en la que estemos
-		$("#com-estudiocaravana-errata-errataBoxWrapper").load("plugin/elements.php #com-estudiocaravana-errata-errataBox");
+		textNodes.parent().mouseup(_getSelectedText);		
+
+		$("#com-estudiocaravana-errata-errataBoxWrapper").load(_rootDirPath+"plugin/elements.php #com-estudiocaravana-errata-errataBox");
 	}
 	
 	function _getTextNodes(node) {
@@ -92,6 +101,9 @@ com.estudiocaravana.Errata = {};
 		$("#com-estudiocaravana-errata-sendingErrata").show(0, 
 			function(){
 				console.log("Función enviarErrata");
+
+				var url = _rootDirPath+"plugin/newErrata.php";
+
 				var errata = $("#com-estudiocaravana-errata-errata").text();
 				
 				var path = $("#com-estudiocaravana-errata-errataPath").val();
@@ -109,9 +121,9 @@ com.estudiocaravana.Errata = {};
 							+"&html="+html;
 				
 				console.log("Mensaje: "+data);	
-				
+
 				$.ajax({
-					url: "/errata2/plugin/newErrata.php",
+					url: url,
 					type: "POST",
 					data: data
 				}).done(function(msg){
@@ -139,12 +151,12 @@ com.estudiocaravana.Errata = {};
 	}
 	
 	function showErrataBox(event, errata){
+
 			var wrapper = $("#com-estudiocaravana-errata-errataBoxWrapper");
 					
 			wrapper.find("#com-estudiocaravana-errata-errataPath").val(_getElementPath(errata));
 			
 			if (wrapper.css("display")=="none"){
-				console.log("Muestro el Wrapper");
 				wrapper
 					.css("left",event.pageX)
 					.css("top",event.pageY)
@@ -155,7 +167,6 @@ com.estudiocaravana.Errata = {};
 	function hideErrataBox(){		
 		$("#com-estudiocaravana-errata-errataBox div").hide();
 		$("#com-estudiocaravana-errata-errataBoxWrapper").hide();
-		console.log("Oculto el Wrapper");		
 	}
 	
 	function showErrataForm(){
@@ -167,6 +178,8 @@ com.estudiocaravana.Errata = {};
 	}	
 	
 	var ns = com.estudiocaravana.Errata;
+
+	//Public methods declaration
 	ns.showErrataBox = showErrataBox;
 	ns.showErrataForm = showErrataForm;
 	ns.showErrataDetails = showErrataDetails;
