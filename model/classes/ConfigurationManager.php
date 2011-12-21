@@ -8,9 +8,7 @@ class ConfigurationManager{
 	private $databasePrefix;
 	private $lang;
 		
-	public function __construct(){
-			
-		//TODO Hacer que coja la ruta independientemente de la carpeta en la que esté
+	public function __construct(){			
 				
 		$conf = simplexml_load_file('../model/conf.xml');	
 		

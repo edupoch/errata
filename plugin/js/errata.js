@@ -3,9 +3,7 @@
 var com;
 
 /** 
- * TODO Ahorrar las búsquedas a elementos del errataBox cacheándolas en variables
- * Existe un problema, porque cuando intento hacerlo y modifico un nodo padre,
- * parece que pierdo la referencia al objeto.
+ * TODO Try to cache the errataBox elements
  */
 
 if (!com) com = {};
@@ -79,6 +77,8 @@ com.estudiocaravana.Errata = {};
 			        text = document.selection.createRange().text;
 			            }
 			
+				console.log(text);
+
 				text += "";			
 				
 				if (text.length > 0){
@@ -112,8 +112,8 @@ com.estudiocaravana.Errata = {};
 				
 				var correction = $("#com-estudiocaravana-errata-errataCorrection").val();
 				
-				//TODO Cargar correctamente los datos
-				
+				//TODO Get the user's IP address 
+
 				var data = "errata="+errata
 							+"&correction="+correction
 							+"&url="+document.URL
@@ -128,12 +128,11 @@ com.estudiocaravana.Errata = {};
 					data: data
 				}).done(function(msg){
 					console.log('Errata "' + msg +'" mandada');
+					//TODO Messages should be injected in its proper place
 					$("#com-estudiocaravana-errata-sendingErrata").hide();
 					$("#com-estudiocaravana-errata-errataSent").show();
 				});
 			});
-		
-		
 	}
 
 	function _getElementPath(element)
@@ -147,7 +146,7 @@ com.estudiocaravana.Errata = {};
 	        return tagName;
 	    }).get().join("/").toUpperCase();
 	    
-	    //TODO Añadir el offset de palabras al path
+	    //TODO Add the word offset to the path
 	}
 	
 	function showErrataBox(event, errata){

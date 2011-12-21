@@ -6,11 +6,11 @@ connect();
 
 $conf = new ConfigurationManager();
 
-//TODO Elegir un tamaño de html más grande
+//TODO Should we delete this file after the installation?
 
 $sql = "CREATE TABLE IF NOT EXISTS `" .$conf->__get("databasePrefix")."errata` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `date` datetime NOT NULL,
+  `date` timestamp DEFAULT CURRENT_TIMESTAMP,
   `errata` varchar(50) CHARACTER SET utf8 NOT NULL,
   `correction` varchar(50) CHARACTER SET utf8 NOT NULL,
   `url` varchar(200) CHARACTER SET utf8 NOT NULL,

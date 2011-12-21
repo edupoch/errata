@@ -33,6 +33,8 @@ function newErrata($errata) {
 		
 		$sql .= "`" . $mp ."` = '".$errata ->__get($mp)."'";
 	}
+
+	//TODO Get the html code and paste it into an external file
 	
 	$optionalProperties = Errata::getOptionalProperties();
 	foreach ($optionalProperties as $op) {
@@ -66,6 +68,25 @@ function checkErrata($errata) {
 	}
 }
 
+function getErratas(){
+	
+	connect();
+
+	$conf = new ConfigurationManager();
+
+	$sql = "SELECT * FROM " . $conf->__get("databasePrefix") . "errata;";
+	$res = mysql_query($sql);
+	$erratas = array();
+
+	while($errata = mysql_fetch_object($res,"Errata"))
+	  {
+	  	array_push($erratas,$errata);
+	  }
+
+	return $erratas;  
+
+}
+
 function connect() {	
 	$conf = new ConfigurationManager();
 	
@@ -85,7 +106,6 @@ function writeLog($function,$menssage){
         $time = date('ymdHi',$time[0]);
         $logMessage = $time.": ".$function." - ".$menssage."\n";
         
-        //TODO Cargar correctamente el log
         $stderr = fopen('../model/errata.log', 'a');
         fwrite($stderr,$logMessage);
         fflush($stderr); 
