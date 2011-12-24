@@ -26,6 +26,7 @@ if (!$erratas || empty($erratas)){
 			<td>Date</td>
 			<td>Errata</td>
 			<td>Correction</td>
+			<td>IP</td>
 			<td>URL</td>
 		</tr>
 
@@ -38,6 +39,7 @@ if (!$erratas || empty($erratas)){
 			<td><?php echo $errata->date ?></td>
 			<td><?php echo $errata->errata ?></td>
 			<td><?php echo $errata->correction ?></td>
+			<td><?php echo $errata->ip ?></td>
 			<td><a href="<?php echo $errata->url ?>"><?php echo $errata->url ?></a></td>
 		</tr>
 

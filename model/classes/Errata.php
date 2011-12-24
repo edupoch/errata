@@ -7,6 +7,7 @@ class Errata {
 	private $errata;
 	private $correction;
 	private $url;
+	private $ip;
 	private $path;
 	private $html;
 	private $description;
@@ -29,7 +30,7 @@ class Errata {
 	}
 	
 	public static function getMandatoryProperties(){
-		return array("errata","correction","url","path","html");
+		return array("errata","correction","url","ip","path","html");
 	}
 	
 	public static function getOptionalProperties(){

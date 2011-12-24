@@ -15,23 +15,25 @@ com.estudiocaravana.Errata = {};
 (function( ){
 
 	var _rootDirPath;
+	var _ns = "com-estudiocaravana-errata-";
+	var _nsid = "#"+_ns;
 	
 	function init(){
 
 		//We get the plugin root directory path from the <script> tag included in the html document
-		_rootDirPath = $("#com-estudiocaravana-errata-script").attr("src");
+		_rootDirPath = $(_nsid+"script").attr("src");
 		_rootDirPath = _rootDirPath.split("/");
 		_rootDirPath = _rootDirPath.slice(0,_rootDirPath.length - 3);
 		_rootDirPath = _rootDirPath.join("/");
 		_rootDirPath = "/" + _rootDirPath;
 
 		$("head").append('<link rel="stylesheet" type="text/css" href="'+_rootDirPath+'plugin/elements.css" />');	
-		$("html").append("<div id='com-estudiocaravana-errata-errataBoxWrapper' style='position:absolute; display:none'></div>");
+		$("html").append("<div id='"+_ns+"errataBoxWrapper' style='position:absolute; display:none'></div>");
 		var textNodes = _getTextNodes(document);
 		textNodes = $(textNodes);
 		textNodes.parent().mouseup(_getSelectedText);		
 
-		$("#com-estudiocaravana-errata-errataBoxWrapper").load(_rootDirPath+"plugin/elements.php #com-estudiocaravana-errata-errataBox");
+		$(_nsid+"errataBoxWrapper").load(_rootDirPath+"plugin/elements.php "+_nsid+"errataBox");
 	}
 	
 	function _getTextNodes(node) {
@@ -59,7 +61,7 @@ com.estudiocaravana.Errata = {};
 
 	function _getSelectedText(event)
 	{
-			// if ($("#com-estudiocaravana-errata-errataBoxWrapper").css("display")!="none"){
+			// if ($(_nsid+"errataBoxWrapper").css("display")!="none"){
 				// hideErrataBox();
 			// }
 			// else{
@@ -84,55 +86,64 @@ com.estudiocaravana.Errata = {};
 				if (text.length > 0){
 									
 					showErrataBox(event, this);				
-					var errata = $('#com-estudiocaravana-errata-errata');			
+					var errata = $(_nsid+'errata');			
 					errata.html(text);
 										
 				}
-				else{
-					hideErrataBox();
-				}
+				// else{
+				// 	hideErrataBox();
+				// }
 			// }	
 	}
 
 	function sendErrata(){
 		
-		$("#com-estudiocaravana-errata-errataTitle").hide();
-		$("#com-estudiocaravana-errata-errataForm").hide();
-		$("#com-estudiocaravana-errata-sendingErrata").show(0, 
-			function(){
-				console.log("Función enviarErrata");
+		$(_nsid+"errataTitle").hide();
+		$(_nsid+"errataForm").hide();
+		_setStatus("sendingErrata");
+		
+		console.log("Función enviarErrata");
 
-				var url = _rootDirPath+"plugin/newErrata.php";
+		var url = _rootDirPath+"plugin/newErrata.php";
 
-				var errata = $("#com-estudiocaravana-errata-errata").text();
-				
-				var path = $("#com-estudiocaravana-errata-errataPath").val();
-				
-				var html = $("<div />").append($("html").clone()).html();	
-				
-				var correction = $("#com-estudiocaravana-errata-errataCorrection").val();
-				
-				//TODO Get the user's IP address 
+		var errata = $(_nsid+"errata").text();
+		
+		var path = $(_nsid+"errataPath").val();
+		
+		var html = $("<div />").append($("html").clone()).html();	
+		
+		var correction = $(_nsid+"errataCorrection").val();
 
-				var data = "errata="+errata
-							+"&correction="+correction
-							+"&url="+document.URL
-							+"&path="+path
-							+"&html="+html;
-				
-				console.log("Mensaje: "+data);	
+		var ip = $(_nsid+"ipAddress").val();
 
-				$.ajax({
-					url: url,
-					type: "POST",
-					data: data
-				}).done(function(msg){
-					console.log('Errata "' + msg +'" mandada');
-					//TODO Messages should be injected in its proper place
-					$("#com-estudiocaravana-errata-sendingErrata").hide();
-					$("#com-estudiocaravana-errata-errataSent").show();
-				});
-			});
+		var data = "errata="+errata
+					+"&correction="+correction
+					+"&url="+document.URL
+					+"&path="+path
+					+"&ip="+ip
+					+"&html="+html;
+		
+		console.log("Mensaje: "+data);	
+
+		$.ajax({
+			url: url,
+			type: "POST",
+			data: data
+		}).done(function(msg){
+			console.log('Errata "' + msg +'" mandada');
+			_setStatus("errataSent");			
+			//TODO Close the errataBox after some time
+		});
+	}
+
+	function _setStatus(status){		 
+		$(_nsid+"status").children().hide('fast', function(){
+			if (status != undefined){
+				var idStatus = _nsid+"status-"+status;			
+				console.log("Status="+idStatus+" active");
+				$(idStatus).show();			
+			}
+		});
 	}
 
 	function _getElementPath(element)
@@ -151,9 +162,9 @@ com.estudiocaravana.Errata = {};
 	
 	function showErrataBox(event, errata){
 
-			var wrapper = $("#com-estudiocaravana-errata-errataBoxWrapper");
+			var wrapper = $(_nsid+"errataBoxWrapper");
 					
-			wrapper.find("#com-estudiocaravana-errata-errataPath").val(_getElementPath(errata));
+			wrapper.find(_nsid+"errataPath").val(_getElementPath(errata));
 			
 			if (wrapper.css("display")=="none"){
 				wrapper
@@ -164,16 +175,16 @@ com.estudiocaravana.Errata = {};
 	}
 	
 	function hideErrataBox(){		
-		$("#com-estudiocaravana-errata-errataBox div").hide();
-		$("#com-estudiocaravana-errata-errataBoxWrapper").hide();
+		$(_nsid+"errataBox div").hide();
+		$(_nsid+"errataBoxWrapper").hide();
 	}
 	
 	function showErrataForm(){
-		$('#com-estudiocaravana-errata-errataForm').show();
+		$(_nsid+'errataForm').show();
 	}
 	
 	function showErrataDetails(){
-		$('#com-estudiocaravana-errata-errataDetails').show();
+		$(_nsid+'errataDetails').show();
 	}	
 	
 	var ns = com.estudiocaravana.Errata;

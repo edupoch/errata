@@ -1,18 +1,10 @@
 <?php
 
+require_once("../model/util.php");
 require_once("../model/classes/ConfigurationManager.php");
 
 $conf = new ConfigurationManager();
-$lang = $conf->__get("lang");
-
-if ($lang){
-	setlocale(LC_MESSAGES, $lang);
-	putenv("LANG=".$lang.".utf8");
-	
-	bindtextdomain("errata", "./locale");
-	textdomain("errata");
-	bind_textdomain_codeset("errata", 'UTF-8');
-}
+setLang($conf->__get("lang"));
 
 ?>
 
@@ -34,6 +26,7 @@ if ($lang){
 				<input type="text" name="com-estudiocaravana-errata-errataCorrection" value="" id="com-estudiocaravana-errata-errataCorrection"/>
 				<br>
 				<input type="hidden" name="com-estudiocaravana-errata-errataPath" id="com-estudiocaravana-errata-errataPath" value="" />
+				<input type="hidden" name="com-estudiocaravana-errata-ipAddress" id="com-estudiocaravana-errata-ipAddress" value="<?php echo getIpAddress(); ?>" />
 				<a href="javascript:errata.showErrataDetails()"><?php echo _("+ More details")?></a>
 				<br>
 				<div id="com-estudiocaravana-errata-errataDetails">
@@ -46,8 +39,10 @@ if ($lang){
 				</div>
 				<a href="javascript:errata.sendErrata()"><?php echo _("Send errata report")?></a>
 			</div>
-			<div id="com-estudiocaravana-errata-sendingErrata"><?php echo _("Sending errata...")?></div>
-			<div id="com-estudiocaravana-errata-errataSent"><?php echo _("Errata sent!")?></div>			
+			<div id="com-estudiocaravana-errata-status">
+				<span id="com-estudiocaravana-errata-status-sendingErrata"><?php echo _("Sending errata...")?></span>
+				<span id="com-estudiocaravana-errata-status-errataSent"><?php echo _("Errata sent!")?></span>
+			</div>
 		</div>
 	</body>
 </html>
