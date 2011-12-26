@@ -4,6 +4,8 @@ require_once ('../model/model.php');
 
 connect();
 
+//TODO Ask the user for the database configuration 
+
 $conf = new ConfigurationManager();
 
 //TODO Should we delete this file after the installation?

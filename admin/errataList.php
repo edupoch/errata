@@ -21,7 +21,7 @@ if (!$erratas || empty($erratas)){
 	<table border="1">
 		<tr>
 			<td><?php echo _("ID")?></td>
-			<td><?php echo _("Date")?></td>
+			<td><?php echo _("Date")?></td>	
 			<td><?php echo _("Errata")?></td>
 			<td><?php echo _("Correction")?></td>
 			<td><?php echo _("IP")?></td>
@@ -30,6 +30,9 @@ if (!$erratas || empty($erratas)){
 		</tr>
 
 <?php
+
+//TODO Add errata management
+
 	foreach($erratas as $errata){
 ?>
 		<tr>

@@ -8,7 +8,7 @@ define("ERROR_NO_BD", 0);
 define("ERROR_NO_COMPLETE_OP", 1);
 define("ERROR_INCORRECT_DATA", 2);
 
-define("FOLDER_ERRATA_CONTEXTS",'../plugin/errataContexts/');
+define("FOLDER_ERRATA_CONTEXTS",'../admin/errataContexts/');
 
 class ErrataException extends Exception {
 
