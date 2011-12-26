@@ -4,36 +4,34 @@ require_once ('../model/model.php');
 
 //TODO Login required
 
-$pageTitle = "Errata list";
-require_once ('./header.php');
+$pageTitle = _("Errata list");
+require_once ('../admin/header.php');
 
 $erratas = getErratas();
 
 if (!$erratas || empty($erratas)){
 ?>
-	<div>No erratas were found</div>
+	<div><?php echo _("No erratas were found")?></div>
 
 <?php 
 } else{
-
-//TODO I18N it!
 
 ?>
 
 	<table border="1">
 		<tr>
-			<td>ID</td>
-			<td>Date</td>
-			<td>Errata</td>
-			<td>Correction</td>
-			<td>IP</td>
-			<td>URL</td>
+			<td><?php echo _("ID")?></td>
+			<td><?php echo _("Date")?></td>
+			<td><?php echo _("Errata")?></td>
+			<td><?php echo _("Correction")?></td>
+			<td><?php echo _("IP")?></td>
+			<td><?php echo _("URL")?></td>
+			<td><?php echo _("Context")?></td>
 		</tr>
 
 <?php
 	foreach($erratas as $errata){
 ?>
-
 		<tr>
 			<td><?php echo $errata->id ?></td>
 			<td><?php echo $errata->date ?></td>
@@ -41,6 +39,7 @@ if (!$erratas || empty($erratas)){
 			<td><?php echo $errata->correction ?></td>
 			<td><?php echo $errata->ip ?></td>
 			<td><a href="<?php echo $errata->url ?>"><?php echo $errata->url ?></a></td>
+			<td><a href="<?php echo FOLDER_ERRATA_CONTEXTS.$errata->html ?>"><?php echo $errata->html ?></a></td>
 		</tr>
 
 <?php 
@@ -49,6 +48,6 @@ if (!$erratas || empty($erratas)){
 	</table>
 <?php
 }
-require_once ('./footer.php');
+require_once ('../admin/footer.php');
 
 ?>

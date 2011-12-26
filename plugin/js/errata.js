@@ -110,7 +110,7 @@ com.estudiocaravana.Errata = {};
 		
 		var path = $(_nsid+"errataPath").val();
 		
-		var html = $("<div />").append($("html").clone()).html();	
+		var html = encodeURIComponent($("<div />").append($("html").clone()).html());	
 		
 		var correction = $(_nsid+"errataCorrection").val();
 

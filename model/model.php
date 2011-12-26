@@ -8,6 +8,8 @@ define("ERROR_NO_BD", 0);
 define("ERROR_NO_COMPLETE_OP", 1);
 define("ERROR_INCORRECT_DATA", 2);
 
+define("FOLDER_ERRATA_CONTEXTS",'../plugin/errataContexts/');
+
 class ErrataException extends Exception {
 
 }
@@ -17,43 +19,60 @@ function newErrata($errata) {
 	connect();
 	checkErrata($errata);
 	
-	$conf = new ConfigurationManager();
+	$errataContextFile = date('ymdHisu').".html";
+	$errataContextPath = FOLDER_ERRATA_CONTEXTS.$errataContextFile;
+
+	$html_code = stripslashes(html_entity_decode($errata->__get("html"),ENT_NOQUOTES,'UTF-8'));
+	writeLog("newErrata","HTML code = ".$html_code);
+
+	if ( ( $ecf = fopen($errataContextPath,"w") ) &&
+		 ( fwrite($ecf, $html_code) == strlen( $html_code ) ) 
+	   )
+	{
+		fclose($efc);
+
+		$errata->__set("html",$errataContextFile);
+
+		$conf = new ConfigurationManager();
 	
-	$sql = "INSERT INTO " . $conf->__get("databasePrefix") . "errata SET ";
-	
-	$mandatoryProperties = Errata::getMandatoryProperties();
-	$isFirst = true;	
-	foreach($mandatoryProperties as $mp){
-		if (!$isFirst){
-			$sql .= ", ";
-		}
-		else{
-			$isFirst = false;
+		$sql = "INSERT INTO " . $conf->__get("databasePrefix") . "errata SET ";
+		
+		$mandatoryProperties = Errata::getMandatoryProperties();
+		$isFirst = true;	
+		foreach($mandatoryProperties as $mp){
+			if (!$isFirst){
+				$sql .= ", ";
+			}
+			else{
+				$isFirst = false;
+			}
+			
+			$sql .= "`" . $mp ."` = '".$errata ->__get($mp)."'";
 		}
 		
-		$sql .= "`" . $mp ."` = '".$errata ->__get($mp)."'";
-	}
-
-	//TODO Get the html code and paste it into an external file
-	
-	$optionalProperties = Errata::getOptionalProperties();
-	foreach ($optionalProperties as $op) {
-		$temp = $errata ->__get($op);
-		if (isset($temp)) {
-			$sql .= ", `". $op ."` = '" . $temp ."'";
+		$optionalProperties = Errata::getOptionalProperties();
+		foreach ($optionalProperties as $op) {
+			$temp = $errata ->__get($op);
+			if (isset($temp)) {
+				$sql .= ", `". $op ."` = '" . $temp ."'";
+			}
 		}
+		
+		$sql .= ";";
+		
+		writeLog("newErrata","SQL = ".$sql);
+		
+		$res = mysql_query($sql);
+
+		if ($res)
+			return mysql_insert_id();
 	}
-	
-	$sql .= ";";
-	
-	writeLog("newErrata","SQL = ".$sql);
-	
-	$res = mysql_query($sql);
 
-	if ($res)
-		return mysql_insert_id();
+	if ($ecf){
+		fclose($efc);
+	}
 
-	throw new ErrataException("", ERROR_NO_COMPLETE_OP);
+	throw new ErrataException("", ERROR_NO_COMPLETE_OP);	
 
 }
 

@@ -16,7 +16,7 @@ $sql = "CREATE TABLE IF NOT EXISTS `" .$conf->__get("databasePrefix")."errata` (
   `url` varchar(200) CHARACTER SET utf8 NOT NULL,
   `ip` varchar(20) CHARACTER SET utf8 NOT NULL,
   `path` varchar(200) CHARACTER SET utf8 NOT NULL,
-  `html` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `html` varchar(30) CHARACTER SET utf8 NOT NULL,
   `description` varchar(500) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
