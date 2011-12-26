@@ -17,18 +17,18 @@ setLang($conf->__get("lang"));
 		<link rel="stylesheet" type="text/css" href="elementsDebug.css" />
 	</head>
 	<body>
-		<div id='com-estudiocaravana-errata-errataBox'>
-			<a id="com-estudiocaravana-errata-errataTitle" href='javascript:errata.showErrataForm()'><?php echo _("Errata report"); ?></a>
-			<div id="com-estudiocaravana-errata-errataForm">
+		<div id='com-estudiocaravana-errata-box'>
+			<a id="com-estudiocaravana-errata-title" href='javascript:errata.showForm()'><?php echo _("Errata report"); ?></a>
+			<div id="com-estudiocaravana-errata-form">
 				<?php echo _("Errata:")?> "<span id="com-estudiocaravana-errata-errata"></span>"
 				<br>
 				<?php echo _("Correction:")?>
-				<input type="text" name="com-estudiocaravana-errata-errataCorrection" value="" id="com-estudiocaravana-errata-errataCorrection"/>
+				<input type="text" name="com-estudiocaravana-errata-correction" value="" id="com-estudiocaravana-errata-correction"/>
 				<br>				
 				<input type="hidden" name="com-estudiocaravana-errata-ipAddress" id="com-estudiocaravana-errata-ipAddress" value="<?php echo getIpAddress(); ?>" />
-				<a href="javascript:errata.showErrataDetails()"><?php echo _("+ More details")?></a>
+				<a href="javascript:errata.showDetails()"><?php echo _("+ More details")?></a>
 				<br>
-				<div id="com-estudiocaravana-errata-errataDetails">
+				<div id="com-estudiocaravana-errata-details">
 					<?php echo _("Description:")?>
 					<br>
 					<textarea name="com-estudiocaravana-errata-errataDescription"></textarea><br>

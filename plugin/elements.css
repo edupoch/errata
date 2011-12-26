@@ -1,21 +1,18 @@
-#com-estudiocaravana-errata-errataBox{
+#com-estudiocaravana-errata-box{
 	background: #eee; 
 	position:absolute; 
 	width: 230px; 
 	padding: 10px;	
 }
 
-#com-estudiocaravana-errata-errataForm{
+#com-estudiocaravana-errata-form{
 	display: none;
 }
 
-#com-estudiocaravana-errata-errataDetails{
+#com-estudiocaravana-errata-details{
 	display: none;
 }
 
-#com-estudiocaravana-errata-errataPath{
-	display: none;
-}
 
 #com-estudiocaravana-errata-status-sendingErrata{
 	display: none;

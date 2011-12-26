@@ -18,6 +18,7 @@ com.estudiocaravana.Errata = {};
 	var _ns = "com-estudiocaravana-errata-";
 	var _nsid = "#"+_ns;
 	var _selectedRange;
+	var _timeout;
 	
 	function init(){
 
@@ -29,38 +30,56 @@ com.estudiocaravana.Errata = {};
 		_rootDirPath = "/" + _rootDirPath;
 
 		$("head").append('<link rel="stylesheet" type="text/css" href="'+_rootDirPath+'plugin/elements.css" />');	
-		$("html").append("<div id='"+_ns+"errataBoxWrapper' style='position:absolute; display:none'></div>")
-				 .mouseup(_getSelectedText);
+		$("html").append("<div id='"+_ns+"boxWrapper' style='position:absolute; display:none'></div>");
 
-		$(_nsid+"errataBoxWrapper").load(_rootDirPath+"plugin/elements.php "+_nsid+"errataBox");
+		var textNodes = _getTextNodes(document);
+		textNodes = $(textNodes);
+		textNodes.parent().mouseup(_getSelectedText);
+
+		$(_nsid+"boxWrapper").load(_rootDirPath+"plugin/elements.php "+_nsid+"box");
+	}
+
+	function _getTextNodes(node) {
+
+		var whitespace = /^\s*$/;		
+	    var textNodesStack = new Array();
+
+	    function _getTextNodesAux(node) {
+	        if (node.nodeType == 3) {
+	            if (!whitespace.test(node.nodeValue)) {
+	                textNodesStack.push(node);
+	            }
+	        } else {
+	        	if (node.childNodes != undefined){        		
+	        		for(i in node.childNodes){
+	        			_getTextNodesAux(node.childNodes[i]);
+	        		}        		
+	           	}
+	        }
+	    }
+
+	    _getTextNodesAux(node);
+	    return textNodesStack;
 	}
 
 	function _getSelectedText(event)
 	{
-			// if ($(_nsid+"errataBoxWrapper").css("display")!="none"){
-				// hideErrataBox();
-			// }
-			// else{
-				var sel = _getSelection();
-			
-				console.log(sel);
-				
-				var text = sel + "";			
-				
-				if (text.length > 0){
+		var sel = _getSelection();
+					
+		var text = sel + "";			
+		
+		if (text.length > 0){
+			clearTimeout(_timeout);
 
-					_selectedRange = sel.getRangeAt(0);									
+			_selectedRange = sel.getRangeAt(0);									
 
-					_showErrataBox(event);				
-					var errata = $(_nsid+'errata');			
-					errata.html(text);
-										
-				}
-
-				// else{
-				// 	hideErrataBox();
-				// }
-			// }	
+			_showBox(event);				
+			var errata = $(_nsid+'errata');			
+			errata.html(text);
+		}
+		else{
+			hideBox();
+		}		
 	}
 
 	function _getSelection(){
@@ -83,11 +102,9 @@ com.estudiocaravana.Errata = {};
 
 	function sendErrata(){
 		
-		$(_nsid+"errataTitle").hide();
-		$(_nsid+"errataForm").hide();
+		$(_nsid+"title").hide();
+		$(_nsid+"form").hide();
 		_setStatus("sendingErrata");
-		
-		console.log("Función enviarErrata");
 
 		var url = _rootDirPath+"plugin/newErrata.php";
 
@@ -113,7 +130,7 @@ com.estudiocaravana.Errata = {};
 		errataWrapper = $("#"+errataWrapper.id);
 		errataWrapper.contents().unwrap();
 
-		var correction = $(_nsid+"errataCorrection").val();
+		var correction = $(_nsid+"correction").val();
 
 		var ip = $(_nsid+"ipAddress").val();
 
@@ -132,8 +149,8 @@ com.estudiocaravana.Errata = {};
 			data: data
 		}).done(function(msg){
 			console.log("Returned message: '" + msg +"'");
-			_setStatus("errataSent");			
-			//TODO Close the errataBox after some time
+			_setStatus("errataSent");
+			_timeout = setTimeout(hideBox,3000);
 		});
 	}
 
@@ -158,11 +175,12 @@ com.estudiocaravana.Errata = {};
 	    }).get().join("/").toUpperCase();	    
 	}
 	
-	function _showErrataBox(event){
+	function _showBox(event){
 
-			var wrapper = $(_nsid+"errataBoxWrapper");
+			var wrapper = $(_nsid+"boxWrapper");
 			
 			if (wrapper.css("display")=="none"){
+				$(_nsid+"title").show();
 				wrapper
 					.css("left",event.pageX)
 					.css("top",event.pageY)
@@ -170,24 +188,25 @@ com.estudiocaravana.Errata = {};
 			}
 	}
 	
-	function hideErrataBox(){		
-		$(_nsid+"errataBox div").hide();
-		$(_nsid+"errataBoxWrapper").hide();
+	function hideBox(){		
+		$(_nsid+"form").hide();
+		$(_nsid+"boxWrapper").hide();
+		$(_nsid+"status span").hide();
 	}
 	
-	function showErrataForm(){
-		$(_nsid+'errataForm').show();
+	function showForm(){
+		$(_nsid+'form').show();
 	}
 	
-	function showErrataDetails(){
-		$(_nsid+'errataDetails').show();
+	function showDetails(){
+		$(_nsid+'details').show();
 	}	
 	
 	var ns = com.estudiocaravana.Errata;
 
 	//Public methods declaration
-	ns.showErrataForm = showErrataForm;
-	ns.showErrataDetails = showErrataDetails;
+	ns.showForm = showForm;
+	ns.showDetails = showDetails;
 	ns.sendErrata = sendErrata;
 	ns.init = init;
 	
