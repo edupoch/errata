@@ -17,6 +17,7 @@ com.estudiocaravana.Errata = {};
 	var _rootDirPath;
 	var _ns = "com-estudiocaravana-errata-";
 	var _nsid = "#"+_ns;
+	var _selectedRange;
 	
 	function init(){
 
@@ -28,35 +29,10 @@ com.estudiocaravana.Errata = {};
 		_rootDirPath = "/" + _rootDirPath;
 
 		$("head").append('<link rel="stylesheet" type="text/css" href="'+_rootDirPath+'plugin/elements.css" />');	
-		$("html").append("<div id='"+_ns+"errataBoxWrapper' style='position:absolute; display:none'></div>");
-		var textNodes = _getTextNodes(document);
-		textNodes = $(textNodes);
-		textNodes.parent().mouseup(_getSelectedText);		
+		$("html").append("<div id='"+_ns+"errataBoxWrapper' style='position:absolute; display:none'></div>")
+				 .mouseup(_getSelectedText);
 
 		$(_nsid+"errataBoxWrapper").load(_rootDirPath+"plugin/elements.php "+_nsid+"errataBox");
-	}
-	
-	function _getTextNodes(node) {
-		
-		var whitespace = /^\s*$/;		
-	    var textNodesStack = new Array();
-	    
-	    function _getTextNodesAux(node) {
-	        if (node.nodeType == 3) {
-	            if (!whitespace.test(node.nodeValue)) {
-	                textNodesStack.push(node);
-	            }
-	        } else {
-	        	if (node.childNodes != undefined){        		
-	        		for(i in node.childNodes){
-	        			_getTextNodesAux(node.childNodes[i]);
-	        		}        		
-	           	}
-	        }
-	    }
-	
-	    _getTextNodesAux(node);
-	    return textNodesStack;
 	}
 
 	function _getSelectedText(event)
@@ -65,35 +41,44 @@ com.estudiocaravana.Errata = {};
 				// hideErrataBox();
 			// }
 			// else{
-				var text;
-			     if (window.getSelection)
-			    {
-			        text = window.getSelection();
-			             }
-			    else if (document.getSelection)
-			    {
-			        text = document.getSelection();
-			            }
-			    else if (document.selection)
-			    {
-			        text = document.selection.createRange().text;
-			            }
+				var sel = _getSelection();
 			
-				console.log(text);
-
-				text += "";			
+				console.log(sel);
+				
+				var text = sel + "";			
 				
 				if (text.length > 0){
-									
-					showErrataBox(event, this);				
+
+					_selectedRange = sel.getRangeAt(0);									
+
+					_showErrataBox(event);				
 					var errata = $(_nsid+'errata');			
 					errata.html(text);
 										
 				}
+
 				// else{
 				// 	hideErrataBox();
 				// }
 			// }	
+	}
+
+	function _getSelection(){
+		
+	    if (window.getSelection)
+	    {
+			sel = window.getSelection();
+	             }
+	    else if (document.getSelection)
+	    {
+			sel = document.getSelection();
+	            }
+	    else if (document.selection)
+	    {
+			sel = document.selection.createRange().text;
+	            }
+
+		return sel;
 	}
 
 	function sendErrata(){
@@ -108,29 +93,45 @@ com.estudiocaravana.Errata = {};
 
 		var errata = $(_nsid+"errata").text();
 		
-		var path = $(_nsid+"errataPath").val();
+		var path = _getElementPath(_selectedRange.startContainer)+"["+_selectedRange.startOffset+"]->"+
+					_getElementPath(_selectedRange.endContainer)+"["+_selectedRange.endOffset+"]";
+
+		//We wrap the errata with a div in order to make its identification easier 
+		var errataWrapper = document.createElement("div");
+		errataWrapper.id = _ns+"errataWrapper";
+		_selectedRange.surroundContents(errataWrapper);
 		
-		var html = encodeURIComponent($("<div />").append($("html").clone()).html());	
+		/**
+		TODO Should we clone the whole HTML or just the BODY? 
+		The HTML may include code we don't need such as the errataBox, 
+		but showing the errata to the webmaster in its original context 
+		(style, scripts, etc.) could be a cool feature.
+		**/
 		
+		var html = $("<div />").append($("body").clone()).html();	
+		
+		errataWrapper = $("#"+errataWrapper.id);
+		errataWrapper.contents().unwrap();
+
 		var correction = $(_nsid+"errataCorrection").val();
 
 		var ip = $(_nsid+"ipAddress").val();
 
-		var data = "errata="+errata
-					+"&correction="+correction
-					+"&url="+document.URL
-					+"&path="+path
-					+"&ip="+ip
-					+"&html="+html;
+		var data = "errata="+encodeURIComponent(errata)
+					+"&correction="+encodeURIComponent(correction)
+					+"&url="+encodeURIComponent(document.URL)
+					+"&path="+encodeURIComponent(path)
+					+"&ip="+encodeURIComponent(ip)
+					+"&html="+encodeURIComponent(html);
 		
-		console.log("Mensaje: "+data);	
+		console.log("Sent message: "+data);	
 
 		$.ajax({
 			url: url,
 			type: "POST",
 			data: data
 		}).done(function(msg){
-			console.log('Errata "' + msg +'" mandada');
+			console.log("Returned message: '" + msg +"'");
 			_setStatus("errataSent");			
 			//TODO Close the errataBox after some time
 		});
@@ -139,8 +140,7 @@ com.estudiocaravana.Errata = {};
 	function _setStatus(status){		 
 		$(_nsid+"status").children().hide('fast', function(){
 			if (status != undefined){
-				var idStatus = _nsid+"status-"+status;			
-				console.log("Status="+idStatus+" active");
+				var idStatus = _nsid+"status-"+status;				
 				$(idStatus).show();			
 			}
 		});
@@ -155,16 +155,12 @@ com.estudiocaravana.Errata = {};
 	            tagName += "[" + $this.prevAll(tagName).length + "]";
 	        }
 	        return tagName;
-	    }).get().join("/").toUpperCase();
-	    
-	    //TODO Add the word offset to the path
+	    }).get().join("/").toUpperCase();	    
 	}
 	
-	function showErrataBox(event, errata){
+	function _showErrataBox(event){
 
 			var wrapper = $(_nsid+"errataBoxWrapper");
-					
-			wrapper.find(_nsid+"errataPath").val(_getElementPath(errata));
 			
 			if (wrapper.css("display")=="none"){
 				wrapper
@@ -190,7 +186,6 @@ com.estudiocaravana.Errata = {};
 	var ns = com.estudiocaravana.Errata;
 
 	//Public methods declaration
-	ns.showErrataBox = showErrataBox;
 	ns.showErrataForm = showErrataForm;
 	ns.showErrataDetails = showErrataDetails;
 	ns.sendErrata = sendErrata;

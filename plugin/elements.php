@@ -24,8 +24,7 @@ setLang($conf->__get("lang"));
 				<br>
 				<?php echo _("Correction:")?>
 				<input type="text" name="com-estudiocaravana-errata-errataCorrection" value="" id="com-estudiocaravana-errata-errataCorrection"/>
-				<br>
-				<input type="hidden" name="com-estudiocaravana-errata-errataPath" id="com-estudiocaravana-errata-errataPath" value="" />
+				<br>				
 				<input type="hidden" name="com-estudiocaravana-errata-ipAddress" id="com-estudiocaravana-errata-ipAddress" value="<?php echo getIpAddress(); ?>" />
 				<a href="javascript:errata.showErrataDetails()"><?php echo _("+ More details")?></a>
 				<br>
