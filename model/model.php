@@ -2,6 +2,7 @@
 
 require_once ('../model/classes/ConfigurationManager.php');
 require_once ('../model/classes/Errata.php');
+require_once ('../model/util.php');
 
 define("ERROR_GENERIC", 9999);
 define("ERROR_NO_BD", 0);
@@ -19,7 +20,7 @@ function newErrata($errata) {
 	connect();
 	checkErrata($errata);
 	
-	$errataContextFile = date('ymdHisu').".html";
+	$errataContextFile = udate('ymdHisu').".html";
 	$errataContextPath = FOLDER_ERRATA_CONTEXTS.$errataContextFile;
 
 	$html_code = stripslashes(html_entity_decode($errata->__get("html"),ENT_NOQUOTES,'UTF-8'));

@@ -22,4 +22,21 @@ function getIpAddress() {
         }
     }
 }
+
+/*
+    This function let us correctly use microseconds within date formats
+    Seen here:
+    http://stackoverflow.com/questions/169428/php-datetime-microseconds-always-returns-0
+*/
+
+function udate($format, $utimestamp = null)
+{
+    if (is_null($utimestamp))
+        $utimestamp = microtime(true);
+
+    $timestamp = floor($utimestamp);
+    $milliseconds = round(($utimestamp - $timestamp) * 1000000);
+
+    return date(preg_replace('`(?<!\\\\)u`', $milliseconds, $format), $timestamp);
+}
 ?>

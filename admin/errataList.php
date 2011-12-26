@@ -31,6 +31,7 @@ if (!$erratas || empty($erratas)){
 
 <?php
 
+//TODO Group erratas by path (Same path, same errata)
 //TODO Add errata management
 
 	foreach($erratas as $errata){
