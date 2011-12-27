@@ -2,10 +2,6 @@
 
 var com;
 
-/** 
- * TODO Try to cache the errataBox elements
- */
-
 if (!com) com = {};
 
 if (!com.estudiocaravana) com.estudiocaravana = {};
@@ -19,6 +15,7 @@ com.estudiocaravana.Errata = {};
 	var _nsid = "#"+_ns;
 	var _selectedRange;
 	var _timeout;
+	var _allowMouseEvent=true;
 	
 	function init(){
 
@@ -84,18 +81,18 @@ com.estudiocaravana.Errata = {};
 
 	function _getSelection(){
 		
-	    if (window.getSelection)
-	    {
+		if (window.getSelection)
+		{
 			sel = window.getSelection();
-	             }
-	    else if (document.getSelection)
-	    {
+		}
+		else if (document.getSelection)
+		{
 			sel = document.getSelection();
-	            }
-	    else if (document.selection)
-	    {
+		}
+		else if (document.selection)
+		{
 			sel = document.selection.createRange().text;
-	            }
+		}
 
 		return sel;
 	}
@@ -104,7 +101,7 @@ com.estudiocaravana.Errata = {};
 		
 		$(_nsid+"title").hide();
 		$(_nsid+"form").hide();
-		_setStatus("sendingErrata");
+		_setStatus("sendingErrata",false);
 
 		var url = _rootDirPath+"plugin/newErrata.php";
 
@@ -149,14 +146,15 @@ com.estudiocaravana.Errata = {};
 			data: data
 		}).done(function(msg){
 			console.log("Returned message: '" + msg +"'");
-			_setStatus("errataSent");
+			_setStatus("errataSent",true);
 			_timeout = setTimeout(hideBox,3000);
 		});
 	}
 
-	function _setStatus(status){		 
-		$(_nsid+"status").children().hide('fast', function(){
-			if (status != undefined){
+	function _setStatus(status,allowMouseEvent){
+		_allowMouseEvent = allowMouseEvent;		 
+		$(_nsid+"status").children().hide(1,function(){
+			if (status != undefined && status.length > 0){
 				var idStatus = _nsid+"status-"+status;				
 				$(idStatus).show();			
 			}
@@ -177,21 +175,23 @@ com.estudiocaravana.Errata = {};
 	
 	function _showBox(event){
 
-			var wrapper = $(_nsid+"boxWrapper");
-			
-			if (wrapper.css("display")=="none"){
-				$(_nsid+"title").show();
-				wrapper
-					.css("left",event.pageX)
-					.css("top",event.pageY)
-					.show();		
-			}
+		hideBox();
+
+		$(_nsid+"title").show();
+		$(_nsid+"boxWrapper")
+				.css("left",event.pageX)
+				.css("top",event.pageY)
+				.show();		
 	}
 	
-	function hideBox(){		
-		$(_nsid+"form").hide();
-		$(_nsid+"boxWrapper").hide();
-		$(_nsid+"status span").hide();
+	function hideBox(){
+		if (_allowMouseEvent){				
+			$(_nsid+"form").hide();
+			$(_nsid+"boxWrapper").hide();					
+			$(_nsid+"correction").val("");
+			$(_nsid+"status").children().hide();
+			_allowMouseEvent = true;
+		}
 	}
 	
 	function showForm(){
