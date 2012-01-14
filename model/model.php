@@ -88,13 +88,17 @@ function checkErrata($errata) {
 	}
 }
 
-function getErratas(){
+function getErratas($view){
+
+	$fixedValue = ($view == "fixed") ? 1 : 0;
+	$deletedValue = ($view == "deleted") ? 1 : 0;
 	
 	connect();
 
 	$conf = new ConfigurationManager();
 
-	$sql = "SELECT * FROM " . $conf->__get("databasePrefix") . "errata;";
+	$sql = "SELECT * FROM " . $conf->__get("databasePrefix") . "errata
+			WHERE fixed = ".$fixedValue." AND deleted = ".$deletedValue;
 	$res = mysql_query($sql);
 	$erratas = array();
 
@@ -104,6 +108,34 @@ function getErratas(){
 	  }
 
 	return $erratas;  
+
+}
+
+function fixErrata($id,$unfix = false){
+	
+	return updateAttribute($id, "fixed", $unfix ? 0 : 1);
+
+}
+
+function deleteErrata($id, $undelete = false){
+	
+	return updateAttribute($id, "deleted", $undelete ? 0 : 1);
+
+}
+
+function updateAttribute($id, $attribute, $value){
+	
+	connect();
+
+	$conf = new ConfigurationManager();
+
+	$sql = "UPDATE " . $conf->__get("databasePrefix") . "errata 
+			SET ".$attribute." = ".$value."
+			WHERE id = ".$id;
+
+	$res = mysql_query($sql);
+	
+	return $res;
 
 }
 
