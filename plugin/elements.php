@@ -21,9 +21,11 @@ setLang($conf->__get("lang"));
 			<a id="com-estudiocaravana-errata-title" href='javascript:errata.showForm()'><?php echo _("Errata report"); ?></a>
 			<div id="com-estudiocaravana-errata-form">
 				<?php echo _("Errata:")?> "<span id="com-estudiocaravana-errata-errata"></span>"
+				<span id="com-estudiocaravana-errata-errata-error-noerrata" class="com-estudiocaravana-errata-error"><?php echo _("An errata must be selected")?></span>
 				<br>
 				<?php echo _("Correction:")?>
 				<input type="text" name="com-estudiocaravana-errata-correction" value="" id="com-estudiocaravana-errata-correction"/>
+				<span id="com-estudiocaravana-errata-correction-error-nocorrection" class="com-estudiocaravana-errata-error"><?php echo _("A correction must be written")?></span>
 				<br>				
 				<input type="hidden" name="com-estudiocaravana-errata-ipAddress" id="com-estudiocaravana-errata-ipAddress" value="<?php echo getIpAddress(); ?>" />
 				<a href="javascript:errata.showDetails()"><?php echo _("+ More details")?></a>
@@ -31,9 +33,10 @@ setLang($conf->__get("lang"));
 				<div id="com-estudiocaravana-errata-details">
 					<?php echo _("Description:")?>
 					<br>
-					<textarea name="com-estudiocaravana-errata-errataDescription"></textarea><br>
+					<textarea name="com-estudiocaravana-errata-description" id="com-estudiocaravana-errata-description"></textarea><br>
 					<?php echo _("Email:")?>
-					<input type="text" name="com-estudiocaravana-errata-errataEmail" value="" id="com-estudiocaravana-errata-errataEmail"/>
+					<input type="text" name="com-estudiocaravana-errata-email" value="" id="com-estudiocaravana-errata-email"/>
+					<span id="com-estudiocaravana-errata-email-error-invalidformat" class="com-estudiocaravana-errata-error"><?php echo _("Invalid email format")?></span>
 					<br>
 				</div>
 				<a href="javascript:errata.sendErrata()"><?php echo _("Send errata report")?></a>

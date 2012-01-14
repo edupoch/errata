@@ -99,58 +99,84 @@ com.estudiocaravana.Errata = {};
 
 	function sendErrata(){
 		
-		//TODO Error detection
+		//Error checking
+		var errata = $.trim($(_nsid+"errata").text());
+		var correction = $.trim($(_nsid+"correction").val());
+		var email = $.trim($(_nsid+"email").val());
 
-		$(_nsid+"title").hide();
-		$(_nsid+"form").hide();
-		_setStatus("sendingErrata",false);
+		var hasErrors = false;
 
-		var url = _rootDirPath+"plugin/newErrata.php";
+		console.log("errata.length = "+errata.length);
+		console.log("correction.length = "+correction.length);
 
-		var errata = $(_nsid+"errata").text();
+		//Error handling
+		if (errata.length == 0){
+			$(_nsid+"errata-error-noerrata").show();
+			hasErrors = true;
+		}
+		if (correction.length == 0){
+			$(_nsid+"correction-error-nocorrection").show();
+			hasErrors = true;	
+		}
+		if (email.length != 0){
+			if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)){
+				$(_nsid+"email-error-invalidformat").show();
+				hasErrors=true;
+			}
+		}
 		
-		var path = _getElementPath(_selectedRange.startContainer)+"["+_selectedRange.startOffset+"]->"+
-					_getElementPath(_selectedRange.endContainer)+"["+_selectedRange.endOffset+"]";
 
-		//We wrap the errata with a div in order to make its identification easier 
-		var errataWrapper = document.createElement("div");
-		errataWrapper.id = _ns+"errataWrapper";
-		_selectedRange.surroundContents(errataWrapper);
-		
-		/**
-		TODO Should we clone the whole HTML or just the BODY? 
-		The HTML may include code we don't need such as the errataBox, 
-		but showing the errata to the webmaster in its original context 
-		(style, scripts, etc.) could be a cool feature.
-		**/
-		
-		var html = $("<div />").append($("body").clone()).html();	
-		
-		errataWrapper = $("#"+errataWrapper.id);
-		errataWrapper.contents().unwrap();
+		if (!hasErrors){
 
-		var correction = $(_nsid+"correction").val();
+			$(_nsid+"title").hide();
+			$(_nsid+"form").hide();
+			_setStatus("sendingErrata",false);
 
-		var ip = $(_nsid+"ipAddress").val();
+			var url = _rootDirPath+"plugin/newErrata.php";
+			
+			var path = _getElementPath(_selectedRange.startContainer)+"["+_selectedRange.startOffset+"]->"+
+						_getElementPath(_selectedRange.endContainer)+"["+_selectedRange.endOffset+"]";
 
-		var data = "errata="+encodeURIComponent(errata)
-					+"&correction="+encodeURIComponent(correction)
-					+"&url="+encodeURIComponent(document.URL)
-					+"&path="+encodeURIComponent(path)
-					+"&ip="+encodeURIComponent(ip)
-					+"&html="+encodeURIComponent(html);
-		
-		console.log("Sent message: "+data);	
+			//We wrap the errata with a div in order to make its identification easier 
+			var errataWrapper = document.createElement("div");
+			errataWrapper.id = _ns+"errataWrapper";
+			_selectedRange.surroundContents(errataWrapper);
+			
+			/**
+			TODO Should we clone the whole HTML or just the BODY? 
+			The HTML may include code we don't need such as the errataBox, 
+			but showing the errata to the webmaster in its original context 
+			(style, scripts, etc.) could be a cool feature.
+			**/
+			
+			var html = $("<div />").append($("body").clone()).html();	
+			
+			errataWrapper = $("#"+errataWrapper.id);
+			errataWrapper.contents().unwrap();
 
-		$.ajax({
-			url: url,
-			type: "POST",
-			data: data
-		}).done(function(msg){
-			console.log("Returned message: '" + msg +"'");
-			_setStatus("errataSent",true);
-			_timeout = setTimeout(hideBox,3000);
-		});
+			var ip = $(_nsid+"ipAddress").val();
+
+			
+			var data = "errata="+encodeURIComponent(errata)
+						+"&correction="+encodeURIComponent(correction)
+						+"&url="+encodeURIComponent(document.URL)
+						+"&path="+encodeURIComponent(path)
+						+"&ip="+encodeURIComponent(ip)
+						+"&html="+encodeURIComponent(html);
+			
+			console.log("Sent message: "+data);	
+
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: data
+			}).done(function(msg){
+				console.log("Returned message: '" + msg +"'");
+				_setStatus("errataSent",true);
+				_timeout = setTimeout(hideBox,3000);
+			});
+
+		}
 	}
 
 	function _setStatus(status,allowMouseEvent){
@@ -196,7 +222,8 @@ com.estudiocaravana.Errata = {};
 		}
 	}
 	
-	function showForm(){
+	function showForm(){		
+		$("."+_ns+"error").hide();
 		$(_nsid+'form').show();
 	}
 	
