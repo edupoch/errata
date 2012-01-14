@@ -1,0 +1,4 @@
+Options +FollowSymlinks
+RewriteEngine on
+RewriteRule ^structure.php$ - [L]
+RewriteRule ^(.*)$ structure.php?page=$1 [NC]

@@ -99,6 +99,8 @@ com.estudiocaravana.Errata = {};
 
 	function sendErrata(){
 		
+		//TODO Error detection
+
 		$(_nsid+"title").hide();
 		$(_nsid+"form").hide();
 		_setStatus("sendingErrata",false);

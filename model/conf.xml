@@ -1,9 +1,2 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-	<host>localhost</host>
-	<database>errata_test</database>
-	<user>root</user>
-	<password>root</password>
-	<databasePrefix>ec_</databasePrefix>	
-	<lang>es_ES</lang>
-</configuration>
+<?xml version="1.0"?>
+<configuration><host>localhost</host><database>errata_test</database><databasePrefix>ec_</databasePrefix><user>root</user><password>root</password><lang>es_ES</lang></configuration>

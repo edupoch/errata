@@ -1,12 +1,5 @@
 <?php
 
-require_once ('../model/model.php');
-
-//TODO Login required
-
-$pageTitle = _("Errata list");
-require_once ('../admin/header.php');
-
 $erratas = getErratas();
 
 if (!$erratas || empty($erratas)){
@@ -50,8 +43,7 @@ if (!$erratas || empty($erratas)){
 	}
 ?>
 	</table>
-<?php
-}
-require_once ('../admin/footer.php');
 
-?>
+<?php 
+}
+?>	
