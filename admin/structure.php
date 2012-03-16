@@ -4,7 +4,7 @@ require_once ('../model/model.php');
 
 $page = $_GET["page"];
 
-$pageTitle = _("Errata admin page");
+$pageTitle = _("Errata Admin Page");
 require_once ('../admin/header.php');
 
 $end = false;

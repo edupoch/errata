@@ -49,38 +49,53 @@ $erratas = getErratas($view);
 
 ?>
 
+<header>
+	<h1><?php echo $pageTitle ?></h1>
+</header>
+
+<section id="errata-list">
 
 <div id="menu">
-<a href="<?php echo $activeURL ?>"><?php echo _("Active erratas") ?></a>
-<a href="<?php echo $fixedURL ?>"><?php echo _("Fixed erratas") ?></a>
-<a href="<?php echo $deletedURL ?>"><?php echo _("Deleted erratas") ?></a>
+	<ul class="nav nav-tabs">
+	  <li <?php if (!$view){ ?>class="active"<?php } ?> >
+	    <a href="<?php echo $activeURL ?>"><?php echo _("Active erratas") ?></a>
+	  </li>
+	  <li <?php if ($view == "fixed"){ ?>class="active"<?php } ?> >
+	  	<a href="<?php echo $fixedURL ?>"><?php echo _("Fixed erratas") ?></a>
+	  </li>
+	  <li <?php if ($view == "deleted"){ ?>class="active"<?php } ?>>
+	  	<a href="<?php echo $deletedURL ?>"><?php echo _("Deleted erratas") ?></a>
+	  </li>
+	</ul>
 </div>
 
-<div><?php echo $message ?></div>
+<?php if ($message) { ?>
+<div class="alert alert-success"><?php echo $message ?></div>
+<?php } ?>
 
 <?php
 
 if (!$erratas || empty($erratas)){
 ?>
-	<div><?php echo _("No erratas were found")?></div>
+	<div class="well"><?php echo _("No erratas were found")?></div>
 
 <?php 
 } else{
 
 ?>
 
-	<table border="1">
+	<table class="table table-striped">
 		<tr>
-			<td><?php echo _("ID")?></td>
-			<td><?php echo _("Date")?></td>	
-			<td><?php echo _("Errata")?></td>
-			<td><?php echo _("Correction")?></td>
-			<td><?php echo _("IP")?></td>
-			<td><?php echo _("URL")?></td>
-			<td><?php echo _("Context")?></td>
-			<td></td>
+			<th><?php echo _("ID")?></th>
+			<th><?php echo _("Date")?></th>	
+			<th><?php echo _("Errata")?></th>
+			<th><?php echo _("Correction")?></th>
+			<th><?php echo _("IP")?></th>
+			<th><?php echo _("URL")?></th>
+			<th><?php echo _("Context")?></th>
+			<th></th>
 			<?php if (!$view) {?>
-			<td></td>
+			<th></th>
 			<?php } ?>
 		</tr>
 
@@ -102,26 +117,26 @@ if (!$erratas || empty($erratas)){
 			<form name="input" action="../admin/errataList.php" method="post">
 				<input type="hidden" name="id" id="id" value="<?php echo $errata->id ?>"/>
 				<input type="hidden" name="op" id="op" value="fix"/>
-				<td><input type="submit" value="<?php echo _("Mark as fixed")?>" /></td>
+				<td><button type="submit" class="btn btn-success"><i class="icon-check icon-white"></i> <?php echo _("Mark as fixed")?></button></td>
 			</form>	
 			<form name="input" action="../admin/errataList.php" method="post">
 				<input type="hidden" name="id" id="id" value="<?php echo $errata->id ?>"/>
 				<input type="hidden" name="op" id="op" value="delete"/>
-				<td><input type="submit" value="<?php echo _("Delete it")?>" /></td>
+				<td><button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> <?php echo _("Delete")?></button></td>
 			</form>			
 			<?php } ?>
 			<?php if ($view == "fixed") {?>
 			<form name="input" action="../admin/errataList.php?view=fixed" method="post">
 				<input type="hidden" name="id" id="id" value="<?php echo $errata->id ?>"/>
 				<input type="hidden" name="op" id="op" value="unfix"/>
-				<td><input type="submit" value="<?php echo _("Restore it")?>" /></td>
+				<td><button type="submit" class="btn btn-inverse"><i class="icon-repeat icon-white"></i> <?php echo _("Restore")?></button></td>
 			</form>	
 			<?php } ?>
 			<?php if ($view == "deleted") {?>
 			<form name="input" action="../admin/errataList.php?view=deleted" method="post">
 				<input type="hidden" name="id" id="id" value="<?php echo $errata->id ?>"/>
 				<input type="hidden" name="op" id="op" value="undelete"/>
-				<td><input type="submit" value="<?php echo _("Restore it")?>" /></td>
+				<td><button type="submit" class="btn btn-inverse"><i class="icon-repeat icon-white"></i> <?php echo _("Restore")?></button></td>
 			</form>		
 			<?php } ?>
 		</tr>
@@ -134,3 +149,5 @@ if (!$erratas || empty($erratas)){
 <?php 
 }
 ?>	
+
+</section>

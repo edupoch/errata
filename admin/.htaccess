@@ -1,4 +1,6 @@
 Options +FollowSymlinks
 RewriteEngine on
 RewriteRule ^structure.php$ - [L]
+RewriteRule ^(.*).css$ - [L]
+RewriteRule ^(.*).png$ - [L]
 RewriteRule ^(.*)$ structure.php?page=$1&%{QUERY_STRING} [NC]
